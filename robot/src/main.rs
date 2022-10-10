@@ -1,16 +1,38 @@
-use std::{io::{BufRead, self}, error};
+use std::{io::{BufRead, self}, error, collections::HashMap};
 
 type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
 
-fn robot<R>(mut reader: R) -> Result<u16>
+fn get_diff(map: &HashMap<char, i16>, ch1: char, ch2: char) -> i16 {
+    match (map.get(&ch1), map.get(&ch2)) {
+        (Some(a), Some(b)) => (a - b).abs(),
+        _ => 0
+    }
+}
+
+fn robot<R>(mut reader: R) -> Result<i16>
 where
     R: BufRead,
 {
     let mut buffer = String::new();
     reader.read_line(&mut buffer)?;
-    let num_steps: u16 = buffer.trim().parse()?;
 
-    Ok(num_steps)
+    let mut buffer = String::new();
+    reader.read_line(&mut buffer)?;
+
+    let mut direction_map = HashMap::new();
+    for ch in ['N', 'S', 'W', 'E'] {
+        direction_map.insert(ch, 0i16);
+    }
+
+    for ch in buffer.chars() {
+        direction_map.entry(ch)
+            .and_modify(|count| *count += 1);
+    }
+
+    let diff_x = get_diff(&direction_map, 'E', 'W');
+    let diff_y = get_diff(&direction_map, 'N', 'S');
+
+    Ok(diff_x + diff_y)
 }
 
 fn main() -> Result<()> {

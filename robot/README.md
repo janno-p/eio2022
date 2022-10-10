@@ -1,6 +1,6 @@
 # 1. Delivery Robot in Manhattan (`robot`)
 
-*1 sec*
+*1 sec*  
 *20 points*
 
 A self-driving robot is delivering packages in the Manhattan district of New York. The robot is
@@ -15,7 +15,7 @@ Let us call movement along one street from one interesction to the next a step o
 Find how many steps it takes at minimum for the robot to get back to its warehouse.
 
 **Input.** The first line of input contains *N* , the number of steps taken by the robot so far
-(1 &le; *N* &le; 1 000). The second line contains *N* characters, each of which gives the direction
+(1 &le; *N* &le; 1&nbsp;000). The second line contains *N* characters, each of which gives the direction
 of one step of the robot: `N` for a step to North, `E` for a step to East, `S` for a step to South,
 and `W` for a step to West.
 

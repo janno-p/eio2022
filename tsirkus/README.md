@@ -19,8 +19,8 @@ In order to learn how much room of development he still has, Juku wishes to know
 dice rolls he needs to win the game.
 
 **Input.** The first line of input contains *N* , the number of squares on the game board, and *M*,
-the total number of snakes and ladders (2 &le; *N* &le; 105, 0 &le; *M*). The following *M* lines
-each contain integers *A* and *L* , the description of a snake or a ladder
+the total number of snakes and ladders (2 &le; *N* &le; 10<sup>5</sup>, 0 &le; *M*). The following
+*M* lines each contain integers *A* and *L* , the description of a snake or a ladder
 (1 &lt; *A* &lt; *N*, 1 &le; *L* &le; *N*, *A* &ne; *L*):
 
 * If *A* &lt; *L*, then this line describes a ladder that starts at square *A* and takes the player

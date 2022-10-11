@@ -2,17 +2,88 @@ use std::{io::{BufRead, self}, error};
 
 type Result<T> = std::result::Result<T, Box<dyn error::Error>>;
 
-fn tsirkus<R>(mut reader: R) -> Result<Vec<u16>>
+#[derive(Clone, Debug)]
+struct Node {
+    id: usize,
+    roll: usize,
+    prev: Option<Box<Node>>,
+}
+
+impl Node {
+    fn new(id: usize, roll: usize, prev: Option<Box<Node>>) -> Self {
+        Self { id, roll, prev }
+    }
+}
+
+fn read_num_pair<R>(mut reader: R) -> (usize, usize)
+where
+    R: BufRead
+{
+    let mut buffer = String::new();
+    reader.read_line(&mut buffer).unwrap();
+
+    match buffer.trim().split_whitespace().collect::<Vec<&str>>().as_slice() {
+        &[n, m] => (n.parse().unwrap(), m.parse().unwrap()),
+        _ => panic!("never"),
+    }
+}
+
+fn get_path(num_tiles: usize, game_board: &mut Vec<(usize, bool)>) -> Option<Node> {
+    let mut gen: Vec<_> = vec![Node::new(0, 0, None)];
+    while gen.len() > 0 {
+        let mut temp = Vec::new();
+        for node in gen {
+            for n in 1..7 {
+                let new_id = node.id + n;
+                if new_id >= num_tiles {
+                    continue;
+                } else {
+                    let (q, visited) = game_board.get_mut(new_id).unwrap();
+                    if *visited {
+                        continue;
+                    } else if *q == (num_tiles - 1) {
+                        return Some(Node::new(*q, n, Some(Box::new(node.clone()))));
+                    } else {
+                        *visited = true;
+                        temp.push(Node::new(*q, n, Some(Box::new(node.clone()))));
+                    }
+                }
+            }
+        }
+        gen = temp;
+    }
+    None
+}
+
+fn tsirkus<R>(mut reader: R) -> Result<Vec<usize>>
 where
     R: BufRead,
 {
-    let mut buffer = String::new();
-    reader.read_line(&mut buffer)?;
+    let (num_tiles, m) = read_num_pair(&mut reader);
 
-    let mut buffer = String::new();
-    reader.read_line(&mut buffer)?;
+    let mut game_board: Vec<_> = (0..num_tiles).map(|i| (i, false)).collect();
 
-    let rolls = Vec::new();
+    for _ in 0..m {
+        let (a, l) = read_num_pair(&mut reader);
+        if let Some(m) = game_board.get_mut(a - 1) {
+            (*m) = (l - 1, false);
+        }
+    }
+
+    let mut rolls = Vec::new();
+
+    match get_path(num_tiles, &mut game_board) {
+        Some(path) => {
+            let mut cur = Box::new(path);
+            while let Some(prev) = cur.prev {
+                rolls.push(cur.roll);
+                cur = prev;
+            }
+        },
+        None => {}
+    }
+
+    rolls.reverse();
 
     Ok(rolls)
 }

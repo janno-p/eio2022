@@ -38,7 +38,7 @@ them.
     4-7
     6-6
 
-Here, the first move flips pencils 4 to 7, resulting in `ttttttnttt`. Then the pencil 6 should be
+Here, the first move flips pencils 4 to 7, resulting in `tttttntttt`. Then the pencil 6 should be
 flipped back to have them all point the same way. Note that this is not the only way to get all
 the pencils to point the same way, but there is no way to do it with less than two moves.
 
